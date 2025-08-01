@@ -8,7 +8,7 @@ A lightweight tool to compress images in the browser.
 - No server, no dependencies
 
 ## Usage
-1. Open [the demo link]() in your browser.
+1. Open [the demo link](https://image-compressor.moazmohamedabulbara.online/) in your browser.
 2. Upload an image.
 3. Click "Compress & Download".
 
