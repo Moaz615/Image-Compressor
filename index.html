@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100 flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-2xl p-8 max-w-md w-full text-center">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Image Compressor</h1>
+        <input type="file" id="img" accept="image/*" class="mb-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 cursor-pointer">
+        <button id="btn" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition">Compress</button>
+        <canvas id="canvas" class="hidden"></canvas>
+    </div>
+
+    <script>
+        const img = document.getElementById('img');
+        const btn = document.getElementById('btn');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let image = new Image();
+        let imageLoaded = false;
+
+        img.addEventListener('change', function() {
+            const file = this.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                imageLoaded = false;
+                image = new Image();
+                image.onload = function() {
+                    imageLoaded = true;
+                };
+                image.src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+
+        });
+
+        btn.addEventListener('click', function(){
+            if (!imageLoaded) {
+                alert("Please wait for the image to load");
+                return;
+            }
+
+            canvas.width = image.width;
+            canvas.height = image.height;
+            ctx.drawImage(image, 0, 0);
+
+            canvas.toBlob(function(blob) {
+                const link = document.createElement('a');
+                link.download = 'compressed_image.jpg';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+            }, 'image/jpeg', 0.7);
+        }); 
+    </script>
+</body>
+</html>
